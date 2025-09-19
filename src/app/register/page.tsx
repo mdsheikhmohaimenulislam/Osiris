@@ -8,9 +8,8 @@ const Register = () => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const promise = await signIn("credentials", {
-      redirect: false,
-    });
+    const promise = await signIn(
+    );
 
     console.log(promise);
   };
@@ -65,9 +64,9 @@ const Register = () => {
             Login
           </a>
         </p>
-        {session.status === "authenticated" && (
+        {session&& (
           <div className="mt-4 text-green-400">
-            Logged in as: {JSON.stringify(session.data.user)}
+            Logged in as: {JSON.stringify(session)}
           </div>
         )}
       </div>

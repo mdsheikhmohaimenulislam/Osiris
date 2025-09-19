@@ -1,8 +1,7 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 
 export const collectionNameObj = {
-
-
+userCollection:"users"
   
   // Create collection Name example userCollection:"user"
 };
