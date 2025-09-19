@@ -1,39 +1,48 @@
 "use client";
 
 import Link from "next/link";
-import React, { FormEvent } from "react";
-import loginUser from "../actions/auth/loginUser";
-import { ILoginPayload } from "@/types/auth"
+import React, { FormEvent, useState } from "react";
+import { signIn } from "next-auth/react";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
-
-
-  
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const email = formData.get("email")?.toString();
+    const password = formData.get("password")?.toString();
 
-    const formData = new FormData(event.currentTarget);
-
-    const emailValue = formData.get("email");
-    const passwordValue = formData.get("password");
-
-    if (typeof emailValue !== "string" || typeof passwordValue !== "string") {
-      console.error("Please fill out all required fields.");
+    if (!email || !password) {
+      toast.error("Please fill out all required fields.");
       return;
     }
 
-    const payload: ILoginPayload = {
-      email: emailValue,
-      password: passwordValue,
-    };
+    setLoading(true);
 
     try {
-      const response = await loginUser(payload);
-      console.log("Login successful:", response);
-      // Optionally redirect user here
+      const response = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (response?.ok) {
+        toast.success("Logged in successfully");
+        router.push(response.url || "/");
+        form.reset();
+      } else {
+        toast.error("Failed to log in");
+      }
     } catch (error) {
-      console.error("Login failed:", error);
+      console.error(error);
+      toast.error("Failed to log in");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -72,9 +81,10 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full bg-green-600 hover:bg-green-700 transition-colors py-2 rounded-lg font-semibold"
+            disabled={loading}
+            className="w-full bg-green-600 hover:bg-green-700 transition-colors py-2 rounded-lg font-semibold disabled:opacity-50"
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
