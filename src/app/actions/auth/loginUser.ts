@@ -1,32 +1,27 @@
-"use client";
-import React from "react";
+"use server";
+
 import bcrypt from "bcrypt";
 import dbConnect, { collectionNameObj } from "@/lib/dbConnect";
+import { ILoginPayload } from "@/types/auth";
 
-interface IPayload {
-  email: string;
-  password: string;
-}
-
-const loginUser = async (payload: IPayload) => {
-  const { email, password } = payload;
-
+const loginUser = async ({ email, password }: ILoginPayload) => {
   const userCollection = await dbConnect(collectionNameObj.userCollection);
 
-  const user = await userCollection.findOne({ email });
+  // For testing purpose only (not production)
+  const hashedPassword = await bcrypt.hash(password, 10);
+  await userCollection.insertOne({ email, password: hashedPassword });
 
-  if (!user) {
-    return null; 
-  }
+  const user = await userCollection.findOne<{
+    email: string;
+    password: string;
+  }>({ email });
 
+  if (!user) return null;
 
   const isPasswordOK = await bcrypt.compare(password, user.password);
+  if (!isPasswordOK) return null;
 
-  if (!isPasswordOK) {
-    return null; 
-  }
-
-  return user; 
+  return user;
 };
 
 export default loginUser;
