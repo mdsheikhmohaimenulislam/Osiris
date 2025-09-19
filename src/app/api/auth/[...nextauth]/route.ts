@@ -27,6 +27,8 @@ export const authOption = {
         // You can also use the `req` object to obtain additional parameters
         // (i.e., the request IP address)
 
+        
+
       
         const user =await loginUser(credentials);
         // const user = await res.json();
