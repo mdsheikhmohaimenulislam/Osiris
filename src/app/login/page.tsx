@@ -33,8 +33,8 @@ const Login = () => {
 
       if (response?.ok) {
         toast.success("Logged in successfully");
-        router.push(response.url || "/");
         form.reset();
+        router.push("/");
       } else {
         toast.error("Failed to log in");
       }

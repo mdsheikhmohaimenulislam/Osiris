@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { register } from "../actions/auth/register";
 import { ILoginPayload } from "@/types/auth";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const Register = () => {
   const { data: session } = useSession();
@@ -12,6 +13,8 @@ const Register = () => {
     type: "success" | "error";
     text: string;
   } | null>(null);
+
+  const router=useRouter()
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -39,6 +42,7 @@ const Register = () => {
         });
         const form = event.target as HTMLFormElement;
         form.reset();
+        router.push('/login')
       } else {
         // If backend returned null
         setMessage({ type: "error", text: "User already exists " });
@@ -126,9 +130,9 @@ const Register = () => {
 
         <p className="text-sm text-center mt-5 text-gray-400">
           Already have an account?{" "}
-          <a href="/auth/login" className="text-green-500 hover:underline">
+          <Link href="/login" className="text-green-500 hover:underline">
             Login
-          </a>
+          </Link>
         </p>
 
         {session && (
