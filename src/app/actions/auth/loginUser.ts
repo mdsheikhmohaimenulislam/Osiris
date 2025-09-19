@@ -7,9 +7,7 @@ import { ILoginPayload } from "@/types/auth";
 const loginUser = async ({ email, password }: ILoginPayload) => {
   const userCollection = await dbConnect(collectionNameObj.userCollection);
 
-  // For testing purpose only (not production)
-  const hashedPassword = await bcrypt.hash(password, 10);
-  await userCollection.insertOne({ email, password: hashedPassword });
+  
 
   const user = await userCollection.findOne<{
     email: string;

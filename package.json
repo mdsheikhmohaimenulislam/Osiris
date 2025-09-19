@@ -15,7 +15,8 @@
     "next": "15.5.3",
     "next-auth": "^4.24.11",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "react-formik": "^0.1.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
