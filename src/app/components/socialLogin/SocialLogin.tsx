@@ -16,7 +16,7 @@ export default function SocialLogin() {
       <div className="card rounded-box grid h-20 place-items-center">
         <div className="flex justify-center flex-col gap-4">
           {/* GitHub */}
-          {/* <button
+          <button
             onClick={() => handleSocialLogin("github")}
             className="btn bg-black text-white border-black"
           >
@@ -33,7 +33,7 @@ export default function SocialLogin() {
               ></path>
             </svg>
             Login with GitHub
-          </button> */}
+          </button>
 
           {/* Google */}
           <button
