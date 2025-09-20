@@ -1,10 +1,11 @@
 "use client";
-
 import Link from "next/link";
 import React, { FormEvent, useState } from "react";
 import { signIn } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import SocialLogin from "../components/socialLogin/SocialLogin";
+
 
 const Login = () => {
   const router = useRouter();
@@ -94,6 +95,8 @@ const Login = () => {
             Register
           </Link>
         </p>
+        <SocialLogin/>
+        
       </div>
     </div>
   );

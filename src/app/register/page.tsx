@@ -5,6 +5,8 @@ import { register } from "../actions/auth/register";
 import { ILoginPayload } from "@/types/auth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import SocialLogin from "../components/socialLogin/SocialLogin";
+// import { register } from "../../actions/auth/register";
 
 const Register = () => {
   const { data: session } = useSession();
@@ -134,12 +136,7 @@ const Register = () => {
             Login
           </Link>
         </p>
-
-        {session && (
-          <div className="mt-6 text-center text-green-400 text-sm">
-            Logged in as: {session.user?.email}
-          </div>
-        )}
+        <SocialLogin/>
       </div>
     </div>
   );

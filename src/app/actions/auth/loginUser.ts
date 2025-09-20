@@ -17,7 +17,9 @@ const loginUser = async ({ email, password }: ILoginPayload) => {
   if (!user) return null;
 
 
-  if (!(await bcrypt.compare(password, user.password))) return null;
+  if (!(await bcrypt.compare(password as string, user.password))) return null;
+
+  
 
   
   return { username: user.username, _id: user._id.toString() };

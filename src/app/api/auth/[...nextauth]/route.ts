@@ -1,10 +1,13 @@
 import loginUser from "@/app/actions/auth/loginUser";
 import dbConnect, { collectionNameObj } from "@/lib/dbConnect";
 import NextAuth from "next-auth";
-
+import GoogleProvider from "next-auth/providers/google";
+import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+
 export const authOption = {
+
   providers: [
     CredentialsProvider({
       // The name to display on the sign in form (e.g. 'Sign in with...')
@@ -18,7 +21,7 @@ export const authOption = {
         password: { label: "Password", type: "password" },
       },
 
-      async authorize (credentials, req) {
+      async authorize(credentials, req) {
         console.log(credentials);
         // You need to provide your own logic here that takes the credentials
         // submitted and returns either a object representing a user or value
@@ -27,10 +30,7 @@ export const authOption = {
         // You can also use the `req` object to obtain additional parameters
         // (i.e., the request IP address)
 
-        
-
-      
-        const user =await loginUser(credentials);
+        const user = await loginUser(credentials);
         // const user = await res.json();
 
         // If no error and we have user data, return it
@@ -41,12 +41,18 @@ export const authOption = {
         return null;
       },
     }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    }),
+    GitHubProvider({
+      clientId: process.env.GITHUB_ID as string,
+      clientSecret: process.env.GITHUB_SECRET as string,
+    }),
   ],
- pages: {
-        signIn: "/login"
-    },
- 
-
+  pages: {
+    signIn: "/login",
+  },
 };
 
 const handler = NextAuth(authOption);
