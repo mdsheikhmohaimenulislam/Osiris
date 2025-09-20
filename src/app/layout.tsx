@@ -26,14 +26,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable}  antialiased`}
-      >
+      <body className={`${geistSans.variable}  antialiased`}>
         <NextAuthProvider>
-         <main>
-           {children}
-         </main>
-           <Toaster />
+          <main>{children}</main>
+          <Toaster />
         </NextAuthProvider>
       </body>
     </html>

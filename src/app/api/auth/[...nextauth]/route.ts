@@ -1,44 +1,41 @@
 import loginUser from "@/app/actions/auth/loginUser";
-import dbConnect, { collectionNameObj } from "@/lib/dbConnect";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
-
+import dbConnect, { collectionNameObj } from "@/lib/dbConnect";
 
 export const authOption = {
-
   providers: [
     CredentialsProvider({
-      // The name to display on the sign in form (e.g. 'Sign in with...')
       name: "Credentials",
-      // The credentials is used to generate a suitable form on the sign in page.
-      // You can specify whatever fields you are expecting to be submitted.
-      // e.g. domain, username, password, 2FA token, etc.
-      // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
-        email: { label: "Email", type: "text", placeholder: "jsmith" },
+        email: {
+          label: "Email",
+          type: "text",
+          placeholder: "jsmith@example.com",
+        },
         password: { label: "Password", type: "password" },
       },
+      async authorize(credentials) {
+        if (!credentials) return null;
 
-      async authorize(credentials, req) {
-        console.log(credentials);
-        // You need to provide your own logic here that takes the credentials
-        // submitted and returns either a object representing a user or value
-        // that is false/null if the credentials are invalid.
-        // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
-        // You can also use the `req` object to obtain additional parameters
-        // (i.e., the request IP address)
+        // Call your login helper
+        const dbUser = await loginUser({
+          email: credentials.email,
+          password: credentials.password,
+        });
 
-        const user = await loginUser(credentials);
-        // const user = await res.json();
+        if (!dbUser) return null;
 
-        // If no error and we have user data, return it
-        if (user) {
-          return user;
-        }
-        // Return null if user data could not be retrieved
-        return null;
+        // Map your DB user to NextAuth's User type
+        const user = {
+          id: dbUser._id, // required
+          name: dbUser.username, // optional
+          email: credentials.email, // optional
+        };
+
+        return user;
       },
     }),
     GoogleProvider({
@@ -50,6 +47,39 @@ export const authOption = {
       clientSecret: process.env.GITHUB_SECRET as string,
     }),
   ],
+  callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      // console.log("callbacks log: " ,user, account, profile, email, credentials)
+      if (account) {
+        try {
+          const { providerAccountId, provider } = account;
+          const { email, image, name: username } = user;
+          const payload = {
+            providerAccountId,
+            provider,
+            email,
+            image,
+            username,
+          };
+          // console.log("payload log: ", payload);
+          const userCollection = await dbConnect(
+            collectionNameObj.userCollection
+          );
+          const isUserExist = await userCollection.findOne({
+            providerAccountId,
+          });
+          if (!isUserExist) {
+            await userCollection.insertOne(payload);
+          }
+        } catch (error) {
+          console.log(error);
+          return false;
+        }
+      }
+      return true;
+    },
+  },
+  
   pages: {
     signIn: "/login",
   },
