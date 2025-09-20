@@ -1,22 +1,16 @@
-import { getSession, useSession } from "next-auth/react";
+// import { getServerSession } from "next-auth";
+// import { authOption } from "./api/auth/[...nextauth]/route";
+// import LogOutButton from "./components/LogOutButton";
 
-export default function Home() {
-  // const session = useSession();
-  const severSide = getSession();
+export default async function Home() {
+
+  // const session = await getServerSession(authOption);
 
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <h1> Development Branch </h1>
-      {/* {session && (
-        <div className="mt-4 text-green-400">
-          Logged in as: {JSON.stringify(session)}
-        </div>
-      )} */}
-      {severSide && (
-        <div className="mt-4 text-green-400">
-          Logged in as: {JSON.stringify(severSide)}
-        </div>
-      )}
+    <div className="font-sans grid  items-center justify-items-center min-h-screen   sm:p-20">
+
+      {/* SocialLogin:
+      {JSON.stringify(session)} */}
     </div>
   );
 }
