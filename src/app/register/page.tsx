@@ -1,6 +1,6 @@
 "use client";
 import React, { FormEvent, useState } from "react";
-import { useSession } from "next-auth/react";
+// import { useSession } from "next-auth/react";
 import { register } from "../actions/auth/register";
 import { ILoginPayload } from "@/types/auth";
 import { useRouter } from "next/navigation";
@@ -9,7 +9,7 @@ import SocialLogin from "../components/socialLogin/SocialLogin";
 // import { register } from "../../actions/auth/register";
 
 const Register = () => {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{
     type: "success" | "error";
@@ -44,7 +44,7 @@ const Register = () => {
         });
         const form = event.target as HTMLFormElement;
         form.reset();
-        router.push('/login')
+        router.push('/')
       } else {
         // If backend returned null
         setMessage({ type: "error", text: "User already exists " });

@@ -4,7 +4,7 @@ import dbConnect, { collectionNameObj } from "@/lib/dbConnect";
 import { ILoginPayload } from "@/types/auth";
 
 export const register = async (payload: ILoginPayload) => {
-  const userCollection = dbConnect(collectionNameObj.userCollection);
+  const userCollection = await dbConnect(collectionNameObj.userCollection);
 
   const { email, password } = payload;
   if (!email || !password) return null;
