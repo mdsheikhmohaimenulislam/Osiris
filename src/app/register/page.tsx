@@ -27,11 +27,13 @@ const Register = () => {
     const username = formData.get("username") as string;
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
+    const image = formData.get("image") as File;
 
-    const payload: ILoginPayload & { username?: string } = {
+    const payload: ILoginPayload & { username?: string; image?: File } = {
       email,
       password,
       username,
+      image,
     };
 
     try {
@@ -68,6 +70,17 @@ const Register = () => {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="block mb-2 text-sm font-medium">Upload image</label>
+            <input
+              type="file"
+              name="image"
+              required
+              minLength={3}
+              className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 
+              focus:outline-none focus:ring-2 focus:ring-green-500 transition"
+            />
+          </div>
           <div>
             <label className="block mb-2 text-sm font-medium">User Name</label>
             <input
