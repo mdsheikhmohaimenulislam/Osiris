@@ -1,15 +1,13 @@
 "use client";
 import React, { FormEvent, useState } from "react";
-// import { useSession } from "next-auth/react";
 import { register } from "../actions/auth/register";
 import { ILoginPayload } from "@/types/auth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import SocialLogin from "../components/socialLogin/SocialLogin";
-// import { register } from "../../actions/auth/register";
+
 
 const Register = () => {
-  // const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{
     type: "success" | "error";

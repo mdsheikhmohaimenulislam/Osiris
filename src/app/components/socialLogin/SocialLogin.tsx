@@ -4,11 +4,18 @@ import toast from "react-hot-toast";
 
 export default function SocialLogin() {
   const handleSocialLogin = async (providerName: string) => {
-    toast.loading("Redirecting...");
+    const loadingToast = toast.loading("Redirecting...");
 
-    const result = await signIn(providerName, { callbackUrl: "/" });
-    console.log(result);
+    try {
+      await signIn(providerName, { callbackUrl: "/" });
+      toast.dismiss(loadingToast); // clean up toast before redirect
+    } catch (error) {
+      toast.dismiss(loadingToast);
+      toast.error("Something went wrong, please try again!");
+      console.log(error)
+    }
   };
+
 
   return (
     <div className="flex w-full flex-col">
