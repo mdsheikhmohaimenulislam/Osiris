@@ -5,7 +5,8 @@ import { ILoginPayload } from "@/types/auth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import SocialLogin from "../components/socialLogin/SocialLogin";
-
+import { imageUpload } from "../components/utils";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const [loading, setLoading] = useState(false);
@@ -14,22 +15,33 @@ const Register = () => {
     text: string;
   } | null>(null);
 
-  const router=useRouter()
+  const router = useRouter();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setMessage(null);
     setLoading(true);
 
+
     const formData = new FormData(event.currentTarget);
     const username = formData.get("username") as string;
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
+    const imageFile = formData.get("image") as File | null;
 
-    const payload: ILoginPayload & { username?: string } = {
+    // Upload the image and get the URL
+    let imageUrl: string | undefined;
+
+    if (imageFile) {
+      imageUrl = await imageUpload(imageFile); //  imageUpload gets a File
+    }
+
+    // Prepare the payload
+    const payload: ILoginPayload & { username?: string; image?: string } = {
       email,
       password,
       username,
+      image: imageUrl ?? undefined, //  converts null to undefined
     };
 
     try {
@@ -41,8 +53,9 @@ const Register = () => {
           text: "Registration successful! Redirecting to login...",
         });
         const form = event.target as HTMLFormElement;
+        toast.success("Logged out successfully!");
         form.reset();
-        router.push('/')
+        router.push("/");
       } else {
         // If backend returned null
         setMessage({ type: "error", text: "User already exists " });
@@ -55,6 +68,7 @@ const Register = () => {
       console.error("Register Error:", error);
     } finally {
       setLoading(false);
+
     }
   };
 
@@ -66,6 +80,18 @@ const Register = () => {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="block mb-2 text-sm font-medium">
+              Profile Image
+            </label>
+            <input
+              type="file"
+              name="image"
+              required
+              className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 
+              focus:outline-none focus:ring-2 focus:ring-green-500 transition"
+            />
+          </div>
           <div>
             <label className="block mb-2 text-sm font-medium">User Name</label>
             <input
@@ -134,7 +160,7 @@ const Register = () => {
             Login
           </Link>
         </p>
-        <SocialLogin/>
+        <SocialLogin />
       </div>
     </div>
   );
