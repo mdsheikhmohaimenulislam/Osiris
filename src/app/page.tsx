@@ -1,9 +1,16 @@
+// import { getServerSession } from "next-auth";
+// import { authOption } from "./api/auth/[...nextauth]/route";
+// import LogOutButton from "./components/LogOutButton";
 
+export default async function Home() {
 
-export default function Home() {
+  // const session = await getServerSession(authOption);
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-<h1> Hello Osiris </h1>
+    <div className="font-sans grid  items-center justify-items-center min-h-screen   sm:p-20">
+
+      {/* SocialLogin:
+      {JSON.stringify(session)} */}
     </div>
   );
 }
