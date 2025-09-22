@@ -16,7 +16,7 @@ export default async function Home() {
         </div>
       </DashboardLayout>
 
-      <div className="font-sans grid items-center justify-items-center min-h-screen sm:p-20">
+      <div>
         {/* Add content here */}
       </div>
     </>
