@@ -2,8 +2,12 @@
 import React, { ReactNode } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { WalletIcon, ChartPieIcon, ChartBarIcon, UsersIcon } from '@heroicons/react/24/outline'; 
-
+import {
+  WalletIcon,
+  ChartPieIcon,
+  ChartBarIcon,
+  UsersIcon,
+} from "@heroicons/react/24/outline";
 
 interface DashboardLayoutProps {
   children: ReactNode;
