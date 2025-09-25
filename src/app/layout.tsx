@@ -1,27 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist } from "next/font/google";
 import "./globals.css";
-<<<<<<< HEAD
-import { ToastContainer } from "react-toastify";
-=======
-<<<<<<< HEAD
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-=======
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import NextAuthProvider from "@/provider/NextAuthProvider";
 import { Toaster } from "react-hot-toast";
->>>>>>> b38859f889b9ac89f8b0bae0051fa1c48f06921f
->>>>>>> 13b01de1561880de897fdbb4a7b2d6668ed74c91
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
-
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
 
 export const metadata: Metadata = {
   title: "Osiris",
@@ -35,29 +23,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-<<<<<<< HEAD
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-<<<<<<< HEAD
-        <main>{children}</main>
-        <ToastContainer position="top-right" autoClose={3000} />
-=======
-        <div className="flex flex-col min-h-screen">
-          <Navbar />
-        <main>
-          {children}
-        </main>
-        <Footer />
-        </div>
-=======
-      <body className={`${geistSans.variable}  antialiased`}>
+      <body className={`${geistSans.variable} antialiased`}>
         <NextAuthProvider>
-          <main>{children}</main>
+          <div className="flex flex-col min-h-screen">
+            <Navbar />
+            <main className="">{children}</main>
+            <Footer />
+          </div>
           <Toaster />
         </NextAuthProvider>
->>>>>>> b38859f889b9ac89f8b0bae0051fa1c48f06921f
->>>>>>> 13b01de1561880de897fdbb4a7b2d6668ed74c91
       </body>
     </html>
   );
