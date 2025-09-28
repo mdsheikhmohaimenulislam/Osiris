@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode } from "react";
 
 interface CardProps {
   title?: string;
@@ -6,9 +6,11 @@ interface CardProps {
   className?: string;
 }
 
-const Card: React.FC<CardProps> = ({ title, children, className = '' }) => {
+const Card: React.FC<CardProps> = ({ title, children, className = "" }) => {
   return (
-    <div className={`card w-full bg-base-100 shadow-xl ${className}`}>
+    <div
+      className={`card w-full bg-secondary shadow-xl text-black ${className}`}
+    >
       <div className="card-body">
         {title && <h2 className="card-title">{title}</h2>}
         {children}

@@ -27,7 +27,7 @@ export default function RootLayout({
         <NextAuthProvider>
           <div className="flex flex-col min-h-screen">
             <Navbar />
-            <main>{children}</main>
+            <main className="">{children}</main>
             <Footer />
           </div>
           <Toaster />

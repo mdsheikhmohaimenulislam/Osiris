@@ -4,15 +4,18 @@ import DashboardLayout from "@/components/DashboardLayout";
 // import LogOutButton from "./components/LogOutButton";
 
 export default async function Home() {
-
   // const session = await getServerSession(authOption);
 
   return (
     <>
       <DashboardLayout>
         <div className="container mx-auto">
-          <h1 className="text-3xl font-bold mb-6">Welcome to your Dashboard</h1>
-          <p className="text-lg">Please select a section from the sidebar.</p>
+          <h1 className="text-3xl font-bold text-black mb-6">
+            Welcome to your Dashboard
+          </h1>
+          <p className="text-lg text-black">
+            Please select a section from the sidebar.
+          </p>
         </div>
       </DashboardLayout>
 

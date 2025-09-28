@@ -1,76 +1,191 @@
 "use client";
 
-import DashboardLayout from '@/components/DashboardLayout';
-import Card from '@/components/ui/Card';
+import { useState } from "react";
+import DashboardLayout from "@/components/DashboardLayout";
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
-  PieChart, Pie, Cell
-} from 'recharts';
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  BarChart,
+  Bar,
+  Legend,
+} from "recharts";
+import { TrendingUp, TrendingDown, Award } from "lucide-react";
 
-// Sample data for a line chart
-const monthlyData = [
-  { name: 'Jan', spending: 250, saving: 150 },
-  { name: 'Feb', spending: 300, saving: 200 },
-  { name: 'Mar', spending: 280, saving: 220 },
-  { name: 'Apr', spending: 350, saving: 180 },
-  { name: 'May', spending: 320, saving: 250 },
-  { name: 'Jun', spending: 400, saving: 100 },
+// Demo Data
+const incomeExpenseData = [
+  { month: "Jan", income: 1200, expense: 800 },
+  { month: "Feb", income: 1600, expense: 1200 },
+  { month: "Mar", income: 1800, expense: 1000 },
+  { month: "Apr", income: 1400, expense: 1700 },
+  { month: "May", income: 2000, expense: 1500 },
 ];
 
-// Sample data for a pie chart
-const pieData = [
-  { name: 'Food', value: 400 },
-  { name: 'Rent', value: 300 },
-  { name: 'Entertainment', value: 300 },
-  { name: 'Transport', value: 200 },
-  { name: 'Utilities', value: 278 },
+const categoryData = [
+  { name: "Food", value: 600 },
+  { name: "Travel", value: 300 },
+  { name: "Shopping", value: 500 },
+  { name: "Others", value: 200 },
 ];
 
-const COLORS = ['#FFD700', '#0D47A1', '#8884d8', '#82ca9d', '#ffc658'];
+const yearlyData = [
+  { month: "Jan", income: 1200, expense: 800 },
+  { month: "Feb", income: 1600, expense: 1200 },
+  { month: "Mar", income: 1800, expense: 1000 },
+  { month: "Apr", income: 1400, expense: 1700 },
+  { month: "May", income: 2000, expense: 1500 },
+  { month: "Jun", income: 2200, expense: 1800 },
+];
+
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 export default function StatisticsPage() {
+  const [selectedYear, setSelectedYear] = useState("2025");
+
+  const totalIncome = incomeExpenseData.reduce((sum, d) => sum + d.income, 0);
+  const totalExpense = incomeExpenseData.reduce((sum, d) => sum + d.expense, 0);
+  const savingsRatio = ((totalIncome - totalExpense) / totalIncome) * 100;
+
+  const topCategory = categoryData.reduce((max, d) =>
+    d.value > max.value ? d : max
+  );
+
   return (
     <DashboardLayout>
-      <div className="container mx-auto p-4">
-        <h2 className="text-2xl font-semibold mb-4">Financial Statistics</h2>
-        
+      <div className="max-w-6xl mx-auto p-8 text-gray-900">
+        <h1 className="text-3xl font-bold mb-6">📊 Expense Statistics</h1>
+
+        {/* Filters */}
+        <div className="flex justify-end mb-6">
+          <select
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(e.target.value)}
+            className="p-2 border rounded-lg"
+          >
+            <option value="2025">2025</option>
+            <option value="2024">2024</option>
+          </select>
+        </div>
+
+        {/* Cards Section */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="bg-white shadow-lg rounded-2xl p-6 flex items-center gap-4">
+            <TrendingUp className="w-10 h-10 text-green-500" />
+            <div>
+              <h2 className="text-lg font-semibold">Highest Income</h2>
+              <p className="text-2xl font-bold">
+                ${Math.max(...incomeExpenseData.map((d) => d.income))}
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-white shadow-lg rounded-2xl p-6 flex items-center gap-4">
+            <TrendingDown className="w-10 h-10 text-red-500" />
+            <div>
+              <h2 className="text-lg font-semibold">Highest Expense</h2>
+              <p className="text-2xl font-bold">
+                ${Math.max(...incomeExpenseData.map((d) => d.expense))}
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-white shadow-lg rounded-2xl p-6 flex items-center gap-4">
+            <Award className="w-10 h-10 text-yellow-500" />
+            <div>
+              <h2 className="text-lg font-semibold">Top Category</h2>
+              <p className="text-2xl font-bold">{topCategory.name}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Charts Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Monthly Spending Chart */}
-          <Card title="Monthly Spending & Saving Trend">
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={monthlyData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
+          {/* Income vs Expense Trend */}
+          <div className="bg-white shadow-lg rounded-2xl p-6">
+            <h2 className="text-lg font-semibold mb-4">
+              Income vs Expense Trend
+            </h2>
+            <ResponsiveContainer width="100%" height={250}>
+              <LineChart data={incomeExpenseData}>
+                <XAxis dataKey="month" />
                 <YAxis />
                 <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="spending" stroke="#dc2626" activeDot={{ r: 8 }} />
-                <Line type="monotone" dataKey="saving" stroke="#16a34a" />
+                <Line
+                  type="monotone"
+                  dataKey="income"
+                  stroke="#4ade80"
+                  strokeWidth={3}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="expense"
+                  stroke="#f87171"
+                  strokeWidth={3}
+                />
               </LineChart>
             </ResponsiveContainer>
-          </Card>
-          {/* Expense Categories Chart (Pie Chart) */}
-          <Card title="Expense Categories Breakdown">
-            <ResponsiveContainer width="100%" height={300}>
+          </div>
+
+          {/* Category Wise Expense */}
+          <div className="bg-white shadow-lg rounded-2xl p-6">
+            <h2 className="text-lg font-semibold mb-4">
+              Category-wise Expenses
+            </h2>
+            <ResponsiveContainer width="100%" height={250}>
               <PieChart>
                 <Pie
-                  data={pieData}
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={100}
-                  fill="#8884d8"
+                  data={categoryData}
                   dataKey="value"
-                  label={(entry) => entry.name}
+                  nameKey="name"
+                  outerRadius={100}
                 >
-                  {pieData.map((_, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  {categoryData.map((_, i) => (
+                    <Cell key={i} fill={COLORS[i % COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip />
-                <Legend />
               </PieChart>
             </ResponsiveContainer>
-          </Card>
+          </div>
+        </div>
+
+        {/* Yearly Overview */}
+        <div className="mt-8 bg-white shadow-lg rounded-2xl p-6">
+          <h2 className="text-lg font-semibold mb-4">
+            Yearly Overview ({selectedYear})
+          </h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={yearlyData}>
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="income" fill="#4ade80" />
+              <Bar dataKey="expense" fill="#f87171" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Savings Ratio */}
+        <div className="mt-8 bg-white shadow-lg rounded-2xl p-6 text-center">
+          <h2 className="text-lg font-semibold mb-4">Savings Ratio</h2>
+          <div className="w-32 h-32 mx-auto rounded-full border-8 border-gray-200 flex items-center justify-center relative">
+            <div
+              className="absolute top-0 left-0 w-32 h-32 rounded-full border-8 border-green-500"
+              style={{
+                clipPath: `inset(${100 - savingsRatio}% 0 0 0)`,
+              }}
+            ></div>
+            <span className="text-xl font-bold">
+              {savingsRatio.toFixed(1)}%
+            </span>
+          </div>
         </div>
       </div>
     </DashboardLayout>
