@@ -168,7 +168,7 @@ export default function AddFRom() {
                 <label
                   key={p}
                   className="flex items-center gap-2 p-3 border border-gray-300 rounded-xl shadow-sm cursor-pointer hover:bg-blue-50 transition"
-                >
+                > 
                   <input
                     type="checkbox"
                     // checked={formData.participants.includes(p)}
