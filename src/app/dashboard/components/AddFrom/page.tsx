@@ -1,14 +1,14 @@
-"use client";
-import React from "react";
+import { FormEvent } from "react";
 
-export default function AddFRom() {
+
+export default function AddFrom({handleFromSubmit}:{handleFromSubmit: (e: FormEvent<HTMLFormElement>) => void}) {
   return (
     <div className=" m-10  p-10 bg-secondary rounded-3xl shadow-2xl border-2 border-red-300 text-gray-800">
       <h1 className="text-4xl font-bold mb-10 text-center text-gray-900">
         Create New Expense
       </h1>
 
-      <form className="space-y-12">
+      <form onSubmit={handleFromSubmit} className="space-y-12">
         {/* Expense Info */}
         <section className="space-y-6">
           <h2 className="text-2xl font-semibold text-gray-700 border-b border-gray-200 pb-2">
@@ -133,7 +133,7 @@ export default function AddFRom() {
                   Expense Recurrence
                 </label>
                 <select
-                  name="recurrence"
+                  name="expense"
                   className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
                 >
                   <option>None</option>
