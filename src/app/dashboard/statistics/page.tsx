@@ -17,8 +17,8 @@ import {
   Legend,
 } from "recharts";
 import { TrendingUp, TrendingDown, Award } from "lucide-react";
+import { motion } from "framer-motion";
 
-// Demo Data
 const incomeExpenseData = [
   { month: "Jan", income: 1200, expense: 800 },
   { month: "Feb", income: 1600, expense: 1200 },
@@ -43,7 +43,7 @@ const yearlyData = [
   { month: "Jun", income: 2200, expense: 1800 },
 ];
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+const COLORS = ["#00C49F", "#FFBB28", "#0088FE", "#FF8042"];
 
 export default function StatisticsPage() {
   const [selectedYear, setSelectedYear] = useState("2025");
@@ -51,64 +51,82 @@ export default function StatisticsPage() {
   const totalIncome = incomeExpenseData.reduce((sum, d) => sum + d.income, 0);
   const totalExpense = incomeExpenseData.reduce((sum, d) => sum + d.expense, 0);
   const savingsRatio = ((totalIncome - totalExpense) / totalIncome) * 100;
-
   const topCategory = categoryData.reduce((max, d) =>
     d.value > max.value ? d : max
   );
 
   return (
     <DashboardLayout>
-      <div className="max-w-6xl mx-auto p-8 text-gray-900">
-        <h1 className="text-3xl font-bold mb-6">📊 Expense Statistics</h1>
+      <div className="max-w-7xl mx-auto p-6 md:p-10 bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen text-gray-900">
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-4xl font-extrabold mb-8 text-slate-800 tracking-tight"
+        >
+          📊 Expense & Income Overview
+        </motion.h1>
 
-        {/* Filters */}
-        <div className="flex justify-end mb-6">
+        {/* Filter */}
+        <div className="flex justify-end mb-8">
           <select
             value={selectedYear}
             onChange={(e) => setSelectedYear(e.target.value)}
-            className="p-2 border rounded-lg"
+            className="p-2 rounded-xl border bg-white shadow-sm hover:shadow-md transition"
           >
             <option value="2025">2025</option>
             <option value="2024">2024</option>
           </select>
         </div>
 
-        {/* Cards Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white shadow-lg rounded-2xl p-6 flex items-center gap-4">
-            <TrendingUp className="w-10 h-10 text-green-500" />
-            <div>
-              <h2 className="text-lg font-semibold">Highest Income</h2>
-              <p className="text-2xl font-bold">
-                ${Math.max(...incomeExpenseData.map((d) => d.income))}
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-white shadow-lg rounded-2xl p-6 flex items-center gap-4">
-            <TrendingDown className="w-10 h-10 text-red-500" />
-            <div>
-              <h2 className="text-lg font-semibold">Highest Expense</h2>
-              <p className="text-2xl font-bold">
-                ${Math.max(...incomeExpenseData.map((d) => d.expense))}
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-white shadow-lg rounded-2xl p-6 flex items-center gap-4">
-            <Award className="w-10 h-10 text-yellow-500" />
-            <div>
-              <h2 className="text-lg font-semibold">Top Category</h2>
-              <p className="text-2xl font-bold">{topCategory.name}</p>
-            </div>
-          </div>
+        {/* Summary Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+          {[
+            {
+              icon: <TrendingUp className="w-10 h-10 text-green-500" />,
+              title: "Highest Income",
+              value: `$${Math.max(...incomeExpenseData.map((d) => d.income))}`,
+            },
+            {
+              icon: <TrendingDown className="w-10 h-10 text-red-500" />,
+              title: "Highest Expense",
+              value: `$${Math.max(...incomeExpenseData.map((d) => d.expense))}`,
+            },
+            {
+              icon: <Award className="w-10 h-10 text-yellow-500" />,
+              title: "Top Category",
+              value: topCategory.name,
+            },
+          ].map((item, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: idx * 0.1 }}
+              className="bg-white rounded-2xl shadow-lg hover:shadow-xl p-6 flex items-center gap-5 border border-slate-100 transition-all duration-300"
+            >
+              {item.icon}
+              <div>
+                <h2 className="text-lg font-medium text-slate-600">
+                  {item.title}
+                </h2>
+                <p className="text-2xl font-bold text-slate-800">
+                  {item.value}
+                </p>
+              </div>
+            </motion.div>
+          ))}
         </div>
 
-        {/* Charts   Section */}
+        {/* Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Income vs Expense Trend */}
-          <div className="bg-white shadow-lg rounded-2xl p-6">
-            <h2 className="text-lg font-semibold mb-4">
+          {/* Line Chart */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white rounded-2xl shadow-lg p-6"
+          >
+            <h2 className="text-lg font-semibold mb-4 text-slate-700">
               Income vs Expense Trend
             </h2>
             <ResponsiveContainer width="100%" height={250}>
@@ -130,11 +148,15 @@ export default function StatisticsPage() {
                 />
               </LineChart>
             </ResponsiveContainer>
-          </div>
+          </motion.div>
 
-          {/* Category Wise Expense */}
-          <div className="bg-white shadow-lg rounded-2xl p-6">
-            <h2 className="text-lg font-semibold mb-4">
+          {/* Pie Chart */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white rounded-2xl shadow-lg p-6"
+          >
+            <h2 className="text-lg font-semibold mb-4 text-slate-700">
               Category-wise Expenses
             </h2>
             <ResponsiveContainer width="100%" height={250}>
@@ -144,6 +166,7 @@ export default function StatisticsPage() {
                   dataKey="value"
                   nameKey="name"
                   outerRadius={100}
+                  label
                 >
                   {categoryData.map((_, i) => (
                     <Cell key={i} fill={COLORS[i % COLORS.length]} />
@@ -152,12 +175,16 @@ export default function StatisticsPage() {
                 <Tooltip />
               </PieChart>
             </ResponsiveContainer>
-          </div>
+          </motion.div>
         </div>
 
-        {/* Yearly Overview */}
-        <div className="mt-8 bg-white shadow-lg rounded-2xl p-6">
-          <h2 className="text-lg font-semibold mb-4">
+        {/* Bar Chart */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-10 hidden md:block bg-white rounded-2xl shadow-lg p-6"
+        >
+          <h2 className="text-lg font-semibold mb-4 text-slate-700">
             Yearly Overview ({selectedYear})
           </h2>
           <ResponsiveContainer width="100%" height={300}>
@@ -166,27 +193,34 @@ export default function StatisticsPage() {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="income" fill="#4ade80" />
-              <Bar dataKey="expense" fill="#f87171" />
+              <Bar dataKey="income" fill="#4ade80" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="expense" fill="#f87171" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
-        </div>
+        </motion.div>
 
         {/* Savings Ratio */}
-        <div className="mt-8 bg-white shadow-lg rounded-2xl p-6 text-center">
-          <h2 className="text-lg font-semibold mb-4">Savings Ratio</h2>
-          <div className="w-32 h-32 mx-auto rounded-full border-8 border-gray-200 flex items-center justify-center relative">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-10 bg-white rounded-2xl shadow-lg p-6 text-center"
+        >
+          <h2 className="text-lg font-semibold mb-6 text-slate-700">
+            Savings Ratio
+          </h2>
+          <div className="relative w-36 h-36 mx-auto">
+            <div className="absolute inset-0 rounded-full border-8 border-gray-200"></div>
             <div
-              className="absolute top-0 left-0 w-32 h-32 rounded-full border-8 border-green-500"
+              className="absolute inset-0 rounded-full border-8 border-green-500"
               style={{
                 clipPath: `inset(${100 - savingsRatio}% 0 0 0)`,
               }}
             ></div>
-            <span className="text-xl font-bold">
+            <div className="absolute inset-0 flex items-center justify-center text-2xl font-bold text-slate-800">
               {savingsRatio.toFixed(1)}%
-            </span>
+            </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </DashboardLayout>
   );

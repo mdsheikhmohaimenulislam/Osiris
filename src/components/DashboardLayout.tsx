@@ -1,13 +1,7 @@
 "use client";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-// import {
-//   WalletIcon,
-//   ChartPieIcon,
-//   ChartBarIcon,
-//   UsersIcon,
-// } from "@heroicons/react/24/outline";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -15,35 +9,36 @@ interface DashboardLayoutProps {
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false); // ✅ simple toggle state
 
   return (
-    <div className="drawer  lg:drawer-open">
-      <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-      <div className="ml-0 lg:ml-64 drawer-content flex flex-col h-screen overflow-auto bg-accent p-4 ">
-        {/* Page content here */}
-        <label
-          htmlFor="my-drawer-2"
-          className="btn btn-primary drawer-button lg:hidden mb-4"
+    <div className="relative">
+      {/* Top button for small screen */}
+      <div className="lg:hidden bg-accent flex justify-end items-center p-4">
+        <button
+          onClick={() => setOpen(!open)}
+          className="btn btn-primary text-white"
         >
-          Open Menu
-        </label>
-        {children}
+          {open ? "Close Menu" : "Open Menu"}
+        </button>
       </div>
-      <div className="fixed  top-0 pt-13 left-0 h-screen w-64 bg-secondary border-r  ">
-        <label
-          htmlFor="my-drawer-2"
-          aria-label="close sidebar"
-          className="drawer-overlay"
-        ></label>
-        <ul className="  p-4 space-y-3  min-h-full bg-secondary  text-base-content  sticky">
+
+      {/* Sidebar */}
+      <div
+        className={`fixed  top-0 pt-12 left-0 h-screen w-64 bg-secondary border-r transition-transform duration-300 ${
+          open ? "translate-x-0 z-30" : "-translate-x-full"
+        } lg:translate-x-0`}
+      >
+        <ul className="p-4 space-y-3 min-h-full bg-secondary text-base-content">
           <li>
             <Link
               href="/dashboard/expenses"
+              // onClick={() => setOpen(false)} // close menu after navigation
               className={`flex items-center space-x-2 ${
                 pathname === "/dashboard/expenses" ? "active" : ""
               }`}
             >
-              <span className="btn rounded-2xl w-full  text-blue-600 hover:bg-accent bg-primary border-0">
+              <span className="btn rounded-2xl w-full text-blue-600 hover:bg-accent bg-primary border-0">
                 Expenses
               </span>
             </Link>
@@ -51,6 +46,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           <li>
             <Link
               href="/dashboard/balances"
+              // onClick={() => setOpen(false)}
               className={`flex items-center space-x-2 ${
                 pathname === "/dashboard/balances" ? "active" : ""
               }`}
@@ -63,6 +59,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           <li>
             <Link
               href="/dashboard/statistics"
+              // onClick={() => setOpen(false)}
               className={`flex items-center space-x-2 ${
                 pathname.startsWith("/dashboard/statistics") ? "active" : ""
               }`}
@@ -75,6 +72,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           <li>
             <Link
               href="/dashboard/groups"
+              // onClick={() => setOpen(false)}
               className={`flex items-center space-x-2 ${
                 pathname.startsWith("/dashboard/groups") ? "active" : ""
               }`}
@@ -86,6 +84,17 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           </li>
         </ul>
       </div>
+
+      {/* Main content */}
+      <div className="lg:ml-64 p-4 bg-accent min-h-screen">{children}</div>
+
+      {/* Overlay for mobile */}
+      {open && (
+        <div
+          className="fixed inset-0  bg-opacity-40 lg:hidden"
+          onClick={() => setOpen(false)}
+        ></div>
+      )}
     </div>
   );
 };

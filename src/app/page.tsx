@@ -1,11 +1,6 @@
 import DashboardLayout from "@/components/DashboardLayout";
-// import { getServerSession } from "next-auth";
-// import { authOption } from "./api/auth/[...nextauth]/route";
-// import LogOutButton from "./components/LogOutButton";
 
 export default async function Home() {
-  // const session = await getServerSession(authOption);
-
   return (
     <>
       <DashboardLayout>
@@ -18,10 +13,6 @@ export default async function Home() {
           </p>
         </div>
       </DashboardLayout>
-
-      <div>
-        {/* Add content here */}
-      </div>
     </>
   );
 }

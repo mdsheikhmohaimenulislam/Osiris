@@ -8,7 +8,7 @@ import {
 
 const Navbar = () => {
   return (
-    <div className=" bg-base-100 sticky top-0 flex justify-between px-5 py-2 z-10">
+    <div className=" bg-base-100 sticky top-0 flex justify-between px-5 py-2 z-50">
       <div className="navbar-center">
         <Link
           href="/"
