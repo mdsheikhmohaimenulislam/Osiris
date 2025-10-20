@@ -19,7 +19,7 @@ export default function ExpensesDeletedButton({
       const result = await res.json();
 
       if (res.ok && result.success) {
-        toast.success("Deleted successfully");
+        toast.success("Deleted successfully"); 
         onDeleted(); // trigger parent refetch
       }
     } catch (error) {
