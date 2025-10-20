@@ -9,7 +9,14 @@ interface DashboardLayoutProps {
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false); // ✅ simple toggle state
+  const [open, setOpen] = useState(false);
+
+  const navItems = [
+    { href: "/dashboard/expenses", label: "Expenses" },
+    { href: "/dashboard/balances", label: "Balances" },
+    { href: "/dashboard/statistics", label: "Statistics" },
+    { href: "/dashboard/groups", label: "Groups" },
+  ];
 
   return (
     <div className="relative">
@@ -25,63 +32,31 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
 
       {/* Sidebar */}
       <div
-        className={`fixed  top-0 pt-12 left-0 h-screen w-64 bg-secondary border-r transition-transform duration-300 ${
+        className={`fixed top-0 pt-12 left-0 h-screen w-64 bg-secondary border-r transition-transform duration-300 ${
           open ? "translate-x-0 z-30" : "-translate-x-full"
         } lg:translate-x-0`}
       >
         <ul className="p-4 space-y-3 min-h-full bg-secondary text-base-content">
-          <li>
-            <Link
-              href="/dashboard/expenses"
-              // onClick={() => setOpen(false)} // close menu after navigation
-              className={`flex items-center space-x-2 ${
-                pathname === "/dashboard/expenses" ? "active" : ""
-              }`}
-            >
-              <span className="btn rounded-2xl w-full text-blue-600 hover:bg-accent bg-primary border-0">
-                Expenses
-              </span>
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/dashboard/balances"
-              // onClick={() => setOpen(false)}
-              className={`flex items-center space-x-2 ${
-                pathname === "/dashboard/balances" ? "active" : ""
-              }`}
-            >
-              <span className="btn w-full rounded-2xl hover:bg-accent bg-primary text-blue-600 border-0">
-                Balances
-              </span>
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/dashboard/statistics"
-              // onClick={() => setOpen(false)}
-              className={`flex items-center space-x-2 ${
-                pathname.startsWith("/dashboard/statistics") ? "active" : ""
-              }`}
-            >
-              <span className="btn w-full rounded-2xl hover:bg-accent bg-primary text-blue-600 border-0">
-                Statistics
-              </span>
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/dashboard/groups"
-              // onClick={() => setOpen(false)}
-              className={`flex items-center space-x-2 ${
-                pathname.startsWith("/dashboard/groups") ? "active" : ""
-              }`}
-            >
-              <span className="btn w-full rounded-2xl hover:bg-accent bg-primary text-blue-600 border-0">
-                Groups
-              </span>
-            </Link>
-          </li>
+          {navItems.map((item) => {
+            const isActive =
+              pathname === item.href || pathname.startsWith(item.href);
+            return (
+              <li key={item.href}>
+                <Link href={item.href}>
+                  <span
+                    className={`btn w-full rounded-2xl border-0 text-lg transition-all duration-200 
+                    ${
+                      isActive
+                        ? "bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg scale-105"
+                        : "bg-primary text-blue-600 hover:bg-blue-100"
+                    }`}
+                  >
+                    {item.label}
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </div>
 
