@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import Card from "@/components/ui/Card"; // custom Card
+import Card from "@/components/ui/Card";
 import {
   PieChart,
   Pie,
@@ -18,7 +18,7 @@ import DashboardLayout from "@/components/DashboardLayout";
 import Link from "next/link";
 
 export default function BalancePage() {
-  // Dummy data (পরে API থেকে আনতে পারবে)
+  // Dummy data
   const [transactions] = useState([
     {
       id: 1,
@@ -50,7 +50,6 @@ export default function BalancePage() {
     },
   ]);
 
-  // মোট Income/Expense/Balance হিসাব
   const totalIncome = transactions
     .filter((t) => t.amount > 0)
     .reduce((a, b) => a + b.amount, 0);
@@ -59,7 +58,6 @@ export default function BalancePage() {
     .reduce((a, b) => a + b.amount, 0);
   const balance = totalIncome + totalExpense;
 
-  // Expense by Category ডাইনামিকালি তৈরি করা
   const expenseByCategory = useMemo(() => {
     const data: Record<string, number> = {};
     transactions.forEach((t) => {
