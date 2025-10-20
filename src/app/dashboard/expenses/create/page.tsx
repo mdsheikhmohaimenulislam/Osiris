@@ -4,10 +4,13 @@ import DashboardLayout from "@/components/DashboardLayout";
 import AddFrom from "../../components/AddFrom/page";
 import { FormEvent } from "react";
 import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
 
 export default function CreateExpensePage() {
+  const { data: session } = useSession();
   const handleFromSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
 
     const form = e.target as HTMLFormElement;
     const data = new FormData(form);
@@ -44,7 +47,7 @@ export default function CreateExpensePage() {
   return (
     <DashboardLayout>
       {/* Form */}
-      <AddFrom handleFromSubmit={handleFromSubmit} />
+      <AddFrom handleFromSubmit={handleFromSubmit} session={session} />
     </DashboardLayout>
   );
 }

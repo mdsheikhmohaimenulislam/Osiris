@@ -1,7 +1,12 @@
+import { Session } from "next-auth";
 import { FormEvent } from "react";
 
+interface AddFromProps {
+  handleFromSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  session: Session | null;
+}
 
-export default function AddFrom({handleFromSubmit}:{handleFromSubmit: (e: FormEvent<HTMLFormElement>) => void}) {
+export default function AddFrom({ handleFromSubmit, session }: AddFromProps) {
   return (
     <div className=" m-10  p-10 bg-secondary rounded-3xl shadow-2xl border-2 border-red-300 text-gray-800">
       <h1 className="text-4xl font-bold mb-10 text-center text-gray-900">
@@ -87,6 +92,16 @@ export default function AddFrom({handleFromSubmit}:{handleFromSubmit: (e: FormEv
               className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-transparent transition min-h-[100px]"
             />
           </div>
+          <div>
+            <label className="block font-medium mb-2">User Gmail</label>
+            <input
+              type="email"
+              name="email"
+              defaultValue={session?.user?.email ?? ""}
+              readOnly
+              className="w-full p-4 border border-gray-300 rounded-xl shadow-sm transition"
+            />
+          </div>
         </section>
 
         {/* Payment Info */}
@@ -107,15 +122,14 @@ export default function AddFrom({handleFromSubmit}:{handleFromSubmit: (e: FormEv
 
             <div>
               <label className="block font-medium mb-2">Paid By</label>
-            <div>
-
-              <input
-                type="text"
-                name="PaidBy"
-                placeholder="Paid By name"
-                className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
-              />
-            </div>
+              <div>
+                <input
+                  type="text"
+                  name="PaidBy"
+                  placeholder="Paid By name"
+                  className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
+                />
+              </div>
             </div>
 
             <div>
@@ -159,20 +173,19 @@ export default function AddFrom({handleFromSubmit}:{handleFromSubmit: (e: FormEv
 
         {/* Participants */}
         <section className="space-y-4">
-            <h2 className="text-2xl font-semibold text-gray-700 border-b border-gray-200 pb-2">
-              Participants
-            </h2>
+          <h2 className="text-2xl font-semibold text-gray-700 border-b border-gray-200 pb-2">
+            Participants
+          </h2>
 
-            <div>
-
-              <input
-                type="text"
-                name="Participants"
-                placeholder="Participants name"
-                className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
-              />
-            </div>
-          </section>
+          <div>
+            <input
+              type="text"
+              name="Participants"
+              placeholder="Participants name"
+              className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
+            />
+          </div>
+        </section>
 
         {/* Submit */}
         <div className="flex justify-end gap-4 pt-6 ">

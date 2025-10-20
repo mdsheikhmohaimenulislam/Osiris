@@ -1,6 +1,9 @@
 import dbConnect, { collectionNameObj } from "@/lib/dbConnect";
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
+import { authOption } from "./[...nextauth]/route";
 
+// expenseCollection
 export const POST = async (req: Request) => {
   try {
     const body = await req.json();
@@ -34,4 +37,18 @@ export const POST = async (req: Request) => {
       { status: 400 }
     );
   }
+};
+
+export const GET = async (req: Request) => {
+  const session = await getServerSession(authOption);
+
+  if (!session || Object.keys(session).length === 0) {
+    return NextResponse.json(
+      { success: false, message: "Request body is empty" },
+      { status: 400 }
+    );
+  }
+  console.log("usr1 data",session);
+
+  return NextResponse.json({});
 };
