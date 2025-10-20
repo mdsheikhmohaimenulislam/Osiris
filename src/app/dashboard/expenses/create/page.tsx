@@ -47,6 +47,7 @@ export default function CreateExpensePage() {
   return (
     <DashboardLayout>
       {/* Form */}
+
       <AddFrom handleFromSubmit={handleFromSubmit} session={session} />
     </DashboardLayout>
   );

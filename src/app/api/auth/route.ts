@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import { authOption } from "./[...nextauth]/route";
 
-// expenseCollection
+// expenseCollection POST data
 export const POST = async (req: Request) => {
   try {
     const body = await req.json();
@@ -39,16 +39,30 @@ export const POST = async (req: Request) => {
   }
 };
 
+
+
+// expenseCollection GET data
 export const GET = async (req: Request) => {
   const session = await getServerSession(authOption);
 
-  if (!session || Object.keys(session).length === 0) {
+  if (!session) {
     return NextResponse.json(
-      { success: false, message: "Request body is empty" },
-      { status: 400 }
+      { success: false, message: "Unauthorized" },
+      { status: 401 }
     );
   }
-  console.log("usr1 data",session);
 
-  return NextResponse.json({});
+  try {
+    const email = session.user?.email;
+    const expenseCollection = await dbConnect(collectionNameObj.expenseCollection);
+    const result = await expenseCollection.find({ email }).toArray();
+
+    return NextResponse.json({ success: true, data: result });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { success: false, message: "Failed to fetch expenses" },
+      { status: 500 }
+    );
+  }
 };

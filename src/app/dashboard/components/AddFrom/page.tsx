@@ -78,7 +78,7 @@ export default function AddFrom({ handleFromSubmit, session }: AddFromProps) {
               <label className="block font-medium mb-2">Income</label>
               <input
                 type="number"
-                name="amount"
+                name="Income"
                 className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
               />
             </div>
