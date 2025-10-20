@@ -27,6 +27,7 @@ export interface Expense {
 
 export default function ExpensesPage() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [loading, setLoading] = useState(false);
 
   // define function outside of useEffect
   const expensesFetchData = async () => {
@@ -34,6 +35,7 @@ export default function ExpensesPage() {
     if (!serverUrl) return;
 
     try {
+      setLoading(true);
       const res = await fetch(`${serverUrl}/api/auth`);
       const result = await res.json();
 
@@ -42,6 +44,8 @@ export default function ExpensesPage() {
       }
     } catch (error) {
       console.error("Failed to fetch expenses:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -83,9 +87,21 @@ export default function ExpensesPage() {
           </div>
 
           {/* data content */}
-          {expenses.map((expense) => (
-            <ExpensesFromData key={expense._id} expense={expense} onDeleted={expensesFetchData} />
-          ))}
+          {loading ? (
+            <div className="flex justify-center py-10">
+              <span className="loading  text-green-600 loading-dots loading-lg"></span>
+            </div>
+          ) : (
+            <>
+              {expenses.map((expense) => (
+                <ExpensesFromData
+                  key={expense._id}
+                  expense={expense}
+                  onDeleted={expensesFetchData}
+                />
+              ))}
+            </>
+          )}
         </div>
       </>
     </DashboardLayout>
