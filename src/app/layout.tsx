@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import NextAuthProvider from "@/provider/NextAuthProvider";
 import { Toaster } from "react-hot-toast";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const montserrat = Montserrat({
   subsets: ["latin"],
+  variable: "--font-montserrat", // name matches the font
 });
 
 export const metadata: Metadata = {
@@ -18,20 +18,20 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} antialiased`}>
+      <body className={`${montserrat.variable} antialiased`}>
         <NextAuthProvider>
           <div className="flex flex-col min-h-screen">
             <Navbar />
-            <main className="">{children}</main>
+            <main>{children}</main>
             <Footer />
           </div>
-          <Toaster />
         </NextAuthProvider>
+        <Toaster />
       </body>
     </html>
   );
