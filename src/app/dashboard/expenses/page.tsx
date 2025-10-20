@@ -27,23 +27,25 @@ export interface Expense {
 
 export default function ExpensesPage() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
-  useEffect(() => {
-    const expensesFetchData = async () => {
-      const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
-      if (!serverUrl) return;
 
-      try {
-        const res = await fetch(`${serverUrl}/api/auth`);
-        const result = await res.json();
+  // define function outside of useEffect
+  const expensesFetchData = async () => {
+    const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
+    if (!serverUrl) return;
 
-        if (result.success) {
-          setExpenses(result.data);
-        }
-      } catch (error) {
-        console.error("Failed to fetch expenses:", error);
+    try {
+      const res = await fetch(`${serverUrl}/api/auth`);
+      const result = await res.json();
+
+      if (result.success) {
+        setExpenses(result.data);
       }
-    };
+    } catch (error) {
+      console.error("Failed to fetch expenses:", error);
+    }
+  };
 
+  useEffect(() => {
     expensesFetchData();
   }, []);
 
@@ -82,7 +84,7 @@ export default function ExpensesPage() {
 
           {/* data content */}
           {expenses.map((expense) => (
-            <ExpensesFromData key={expense._id} expense={expense} />
+            <ExpensesFromData key={expense._id} expense={expense} onDeleted={expensesFetchData} />
           ))}
         </div>
       </>

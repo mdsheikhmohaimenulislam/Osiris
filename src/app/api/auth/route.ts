@@ -39,8 +39,6 @@ export const POST = async (req: Request) => {
   }
 };
 
-
-
 // expenseCollection GET data
 export const GET = async (req: Request) => {
   const session = await getServerSession(authOption);
@@ -54,7 +52,9 @@ export const GET = async (req: Request) => {
 
   try {
     const email = session.user?.email;
-    const expenseCollection = await dbConnect(collectionNameObj.expenseCollection);
+    const expenseCollection = await dbConnect(
+      collectionNameObj.expenseCollection
+    );
     const result = await expenseCollection.find({ email }).toArray();
 
     return NextResponse.json({ success: true, data: result });
