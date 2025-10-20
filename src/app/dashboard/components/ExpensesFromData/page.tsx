@@ -13,7 +13,7 @@ const ExpensesFromData = ({ expense }: ExpensesFromDataProps) => {
     <div>
       {/* Expenses List */}
       <div className="space-y-4 mt-5">
-        <div className="flex items-center  border-2  hover:scale-102 transition-transform hover:shadow-2xl justify-between bg-white shadow-md p-4 rounded-lg">
+        <div className="flex items-center  border-2  hover:scale-102 transition-transform hover:shadow-2xl justify-between bg-white shadow-md p-4 rounded-lg"> 
           {/* Left icon */}
           <FaMoneyBill className="text-green-600 text-xl" />
 
