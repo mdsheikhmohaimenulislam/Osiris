@@ -9,11 +9,11 @@ export default function LogOutButton() {
   };
 
   return (
-    <button
+    <p
       onClick={handleLogout}
-      className="btn bg-red-500 text-white rounded "
+      className=" text-white rounded "
     >
       Log Out
-    </button>
+    </p>
   );
 }
