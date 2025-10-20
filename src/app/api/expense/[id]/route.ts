@@ -46,7 +46,7 @@ export const DELETE = async (
       collectionNameObj.expenseCollection
     );
     const query = { _id: new ObjectId(params.id) };
-
+ 
     //  Validate ownership
     const session = await getServerSession(authOption);
     if (!session || !session.user?.email) {
