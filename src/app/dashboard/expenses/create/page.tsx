@@ -1,22 +1,57 @@
 "use client";
+
 import DashboardLayout from "@/components/DashboardLayout";
 import AddFrom from "../../components/AddFrom/page";
 import { FormEvent } from "react";
+import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function CreateExpensePage() {
-  const handleFromSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const router = useRouter();
+  const { data: session } = useSession();
+  const handleFromSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = new FormData(e.target as HTMLFormElement);
-    const values = Object.fromEntries(data.entries()) as Record<string, FormDataEntryValue>;
 
-    console.log(values);
-    console.log("hello");
+    const form = e.target as HTMLFormElement;
+    const data = new FormData(form);
+    const values = Object.fromEntries(data.entries()) as Record<
+      string,
+      FormDataEntryValue
+    >;
+
+    // simple validation
+    if (!values.title || !values.amount) {
+      toast.error("Please fill out all required fields.");
+      return;
+    }
+
+    try {
+      const server = process.env.NEXT_PUBLIC_SERVER_URL;
+      const res = await fetch(`${server}/api/auth`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+      const result = await res.json();
+      if (res.ok) {
+        toast.success("Expense created successfully!");
+        form.reset();
+        router.push("/dashboard/expenses");
+      } else {
+        toast.error(result.error || "Something went wrong.");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to submit expense.");
+    }
   };
 
   return (
     <DashboardLayout>
       {/* Form */}
-      <AddFrom handleFromSubmit={handleFromSubmit} />
+
+      <AddFrom handleFromSubmit={handleFromSubmit} session={session} />
     </DashboardLayout>
   );
 }

@@ -13,7 +13,8 @@ interface ILoginPayload {
 }
 
 // next-auth options
-export const authOption: NextAuthOptions = {  // Explicit type (NextAuthOptions)
+export const authOption: NextAuthOptions = {
+  // Explicit type (NextAuthOptions)
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -25,13 +26,14 @@ export const authOption: NextAuthOptions = {  // Explicit type (NextAuthOptions)
         },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials): Promise<User | null> {  //  Explicit return type
+      async authorize(credentials): Promise<User | null> {
+        //  Explicit return type
         if (!credentials) return null;
 
         const dbUser = await loginUser({
           email: credentials.email,
           password: credentials.password,
-        } as ILoginPayload);    //  Cast to ILoginPayload
+        } as ILoginPayload); //  Cast to ILoginPayload
 
         if (!dbUser) return null;
 
@@ -55,7 +57,8 @@ export const authOption: NextAuthOptions = {  // Explicit type (NextAuthOptions)
   ],
 
   callbacks: {
-    async signIn({ user, account}) {   // profile/email/credentials removed
+    async signIn({ user, account }) {
+      // profile/email/credentials removed
       //  No need to manually annotate — NextAuth already types this correctly
       if (account) {
         try {
@@ -89,7 +92,6 @@ export const authOption: NextAuthOptions = {  // Explicit type (NextAuthOptions)
       return true;
     },
   },
-
 
   pages: {
     signIn: "/login",

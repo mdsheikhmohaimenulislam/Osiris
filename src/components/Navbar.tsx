@@ -5,8 +5,14 @@ import {
   Cog6ToothIcon,
   ArrowRightStartOnRectangleIcon,
 } from "@heroicons/react/24/outline";
+import LogOutButton from "@/app/components/LogOutButton";
+import { useSession } from "next-auth/react";
+import { CiLogout } from "react-icons/ci";
 
 const Navbar = () => {
+  const { data: session } = useSession();
+
+
   return (
     <div className=" bg-base-100 sticky top-0 flex justify-between px-5 py-2 z-50">
       <div className="navbar-center">
@@ -42,12 +48,21 @@ const Navbar = () => {
                 Settings
               </Link>
             </li>
-            <li>
-              <a>
-                <ArrowRightStartOnRectangleIcon className="h-5 w-5" />
-                Logout
-              </a>
-            </li>
+            {session?.user ? (
+              <li>
+                <a>
+                  <CiLogout className="h-5 w-5" />
+                  <LogOutButton />
+                </a>
+              </li>
+            ) : (
+              <li>
+                <Link href="/login">
+                  <ArrowRightStartOnRectangleIcon className="h-5 w-5" />
+                  Login
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       </div>

@@ -1,7 +1,12 @@
+import { Session } from "next-auth";
 import { FormEvent } from "react";
 
+interface AddFromProps {
+  handleFromSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  session: Session | null;
+}
 
-export default function AddFrom({handleFromSubmit}:{handleFromSubmit: (e: FormEvent<HTMLFormElement>) => void}) {
+export default function AddFrom({ handleFromSubmit, session }: AddFromProps) {
   return (
     <div className=" m-10  p-10 bg-secondary rounded-3xl shadow-2xl border-2 border-red-300 text-gray-800">
       <h1 className="text-4xl font-bold mb-10 text-center text-gray-900">
@@ -73,7 +78,7 @@ export default function AddFrom({handleFromSubmit}:{handleFromSubmit: (e: FormEv
               <label className="block font-medium mb-2">Income</label>
               <input
                 type="number"
-                name="amount"
+                name="Income"
                 className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
               />
             </div>
@@ -85,6 +90,16 @@ export default function AddFrom({handleFromSubmit}:{handleFromSubmit: (e: FormEv
               name="description"
               placeholder="Enter a description for the expense."
               className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-transparent transition min-h-[100px]"
+            />
+          </div>
+          <div>
+            <label className="block font-medium mb-2">User Gmail</label>
+            <input
+              type="email"
+              name="email"
+              defaultValue={session?.user?.email ?? ""}
+              readOnly
+              className="w-full p-4 border border-gray-300 rounded-xl shadow-sm transition"
             />
           </div>
         </section>
@@ -107,15 +122,14 @@ export default function AddFrom({handleFromSubmit}:{handleFromSubmit: (e: FormEv
 
             <div>
               <label className="block font-medium mb-2">Paid By</label>
-              <select
-                name="paidBy"
-                className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
-              >
-                <option value="">Select a participant</option>
-                <option>John</option>
-                <option>Jane</option>
-                <option>Jack</option>
-              </select>
+              <div>
+                <input
+                  type="text"
+                  name="PaidBy"
+                  placeholder="Paid By name"
+                  className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
+                />
+              </div>
             </div>
 
             <div>
@@ -159,37 +173,22 @@ export default function AddFrom({handleFromSubmit}:{handleFromSubmit: (e: FormEv
 
         {/* Participants */}
         <section className="space-y-4">
-            <h2 className="text-2xl font-semibold text-gray-700 border-b border-gray-200 pb-2">
-              Participants
-            </h2>
+          <h2 className="text-2xl font-semibold text-gray-700 border-b border-gray-200 pb-2">
+            Participants
+          </h2>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {["John", "Jane", "Jack", "Art"].map((p) => (
-                <label
-                  key={p}
-                  className="flex items-center gap-2 p-3 border border-gray-300 rounded-xl shadow-sm cursor-pointer hover:bg-blue-50 transition"
-                > 
-                  <input
-                    type="checkbox"
-                    // checked={formData.participants.includes(p)}
-                    // onChange={() =>
-                    //   setFormData((prev) => ({
-                    //     ...prev,
-                    //     participants: prev.participants.includes(p)
-                    //       ? prev.participants.filter((x) => x !== p)
-                    //       : [...prev.participants, p],
-                    //   }))
-                    // }
-                    className="w-5 h-5 accent-blue-500"
-                  />
-                  <span className="font-medium">{p}</span>
-                </label>
-              ))}
-            </div>
-          </section>
+          <div>
+            <input
+              type="text"
+              name="Participants"
+              placeholder="Participants name"
+              className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
+            />
+          </div>
+        </section>
 
         {/* Submit */}
-        <div className="flex justify-end gap-4 pt-6 border-t border-gray-200">
+        <div className="flex justify-end gap-4 pt-6 ">
           <button
             type="submit"
             className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-medium"
