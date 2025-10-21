@@ -5,12 +5,13 @@ import AddFrom from "../../components/AddFrom/page";
 import { FormEvent } from "react";
 import toast from "react-hot-toast";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function CreateExpensePage() {
+  const router = useRouter();
   const { data: session } = useSession();
   const handleFromSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
 
     const form = e.target as HTMLFormElement;
     const data = new FormData(form);
@@ -35,6 +36,7 @@ export default function CreateExpensePage() {
       if (res.ok) {
         toast.success("Expense created successfully!");
         form.reset();
+        router.push("/dashboard/expenses");
       } else {
         toast.error(result.error || "Something went wrong.");
       }

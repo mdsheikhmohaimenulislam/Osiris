@@ -81,7 +81,7 @@ export default function ExpensesPage() {
           <div>
             <input
               type="text"
-              placeholder="Search expenses..."
+              placeholder="Search Expenses Title or Group..."
               className="input input-bordered w-full"
             />
           </div>
