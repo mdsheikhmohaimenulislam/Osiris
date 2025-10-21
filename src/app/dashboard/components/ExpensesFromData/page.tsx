@@ -35,13 +35,13 @@ const ExpensesFromData = ({ expense, onDeleted }: ExpensesFromDataProps) => {
           <div className="flex flex-col">
             {/* Action arrow details section */}
             <Link
-              href={`/dashboard/expenses/${expense?._id}`}
+           href={`/dashboard/expenses/${expense._id}`}
               className="ml-4 btn mb-2 text-black btn-sm hover:bg-yellow-200 bg-white border-none"
             >
               <FaChevronRight size={20} />
             </Link>
             {/* Action arrow details section */}
-            <p className="ml-4 btn btn-sm text-red-500 bg-white border-none hover:bg-red-600 hover:text-white">
+            <p className="ml-4">
               <ExpensesDeletedButton id={expense._id} onDeleted={onDeleted} />
             </p>
           </div>

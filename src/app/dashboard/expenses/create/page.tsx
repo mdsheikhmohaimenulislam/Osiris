@@ -27,7 +27,8 @@ export default function CreateExpensePage() {
     }
 
     try {
-      const res = await fetch("/api/auth", {
+      const server = process.env.NEXT_PUBLIC_SERVER_URL;
+      const res = await fetch(`${server}/api/auth`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),

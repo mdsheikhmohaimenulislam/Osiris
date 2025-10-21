@@ -25,9 +25,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${montserrat.variable} antialiased `}>
         <NextAuthProvider>
-          <div className="flex flex-col min-h-screen">
+          <div>
             <Navbar />
-            <main>{children}</main>
+            <main className="min-h-[calc(100vh-166px)]">{children}</main>
             <Footer />
           </div>
         </NextAuthProvider>

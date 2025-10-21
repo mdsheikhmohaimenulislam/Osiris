@@ -15,11 +15,14 @@ export default function ExpensesDeletedButton({
 }) {
   const handleDeleted = async (id: string) => {
     try {
-      const res = await fetch(`/api/expense/${id}`, { method: "DELETE" });
+      const server = process.env.NEXT_PUBLIC_SERVER_URL;
+      const res = await fetch(`${server}/api/expense/${id}`, {
+        method: "DELETE",
+      });
       const result = await res.json();
 
       if (res.ok && result.success) {
-        toast.success("Deleted successfully"); 
+        toast.success("Deleted successfully");
         onDeleted(); // trigger parent refetch
       }
     } catch (error) {
@@ -31,7 +34,7 @@ export default function ExpensesDeletedButton({
     <MdOutlineDelete
       onClick={() => handleDeleted(id)}
       size={25}
-      className="cursor-pointer text-red-600 hover:text-red-800"
+      className="btn btn-sm bg-white border-none cursor-pointer text-red-600 hover:text-white hover:bg-red-500"
     />
   );
 }

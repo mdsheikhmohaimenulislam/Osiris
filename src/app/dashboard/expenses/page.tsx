@@ -5,6 +5,7 @@ import Link from "next/link";
 import { FaPlus, FaDownload } from "react-icons/fa";
 import ExpensesFromData from "../components/ExpensesFromData/page";
 import { useEffect, useState } from "react";
+
 // import { useState } from "react";
 
 export interface Expense {
@@ -30,28 +31,37 @@ export default function ExpensesPage() {
   const [loading, setLoading] = useState(false);
 
   // define function outside of useEffect
-  const expensesFetchData = async () => {
-    const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
-    if (!serverUrl) return;
+const fetchExpenses = async (searchText: string = "") => {
+  try {
+    setLoading(true);
 
-    try {
-      setLoading(true);
-      const res = await fetch(`${serverUrl}/api/auth`);
-      const result = await res.json();
+    const url =
+      searchText.trim() === ""
+        ? `/api/auth`
+        : `/api/auth?search=${encodeURIComponent(searchText)}`;
 
-      if (result.success) {
-        setExpenses(result.data);
-      }
-    } catch (error) {
-      console.error("Failed to fetch expenses:", error);
-    } finally {
-      setLoading(false);
+    const res = await fetch(url);
+
+    if (!res.ok) {
+      console.error("Fetch failed:", res.status, res.statusText);
+      return;
     }
-  };
 
-  useEffect(() => {
-    expensesFetchData();
-  }, []);
+    const result = await res.json();
+
+    if (result.success) {
+      setExpenses(result.data); // update state
+    }
+  } catch (error) {
+    console.error("Failed to fetch expenses:", error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+useEffect(() => {
+  fetchExpenses(); // no searchText → fetch all
+}, []);
 
   return (
     <DashboardLayout>
@@ -83,6 +93,7 @@ export default function ExpensesPage() {
               type="text"
               placeholder="Search Expenses Title or Group..."
               className="input input-bordered w-full"
+             onChange={(e) => fetchExpenses(e.target.value)}
             />
           </div>
 
@@ -97,7 +108,7 @@ export default function ExpensesPage() {
                 <ExpensesFromData
                   key={expense._id}
                   expense={expense}
-                  onDeleted={expensesFetchData}
+                  onDeleted={fetchExpenses}
                 />
               ))}
             </>

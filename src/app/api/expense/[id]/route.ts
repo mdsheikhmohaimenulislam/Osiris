@@ -6,36 +6,31 @@ import { authOption } from "../../auth/[...nextauth]/route";
 import { revalidatePath } from "next/cache";
 
 //? Expense find single data
-// export const GET = async (
-//   req: Request,
-//   { params }: { params: { id: string } }
-// ) => {
-//   try {
-//     const expenseCollection = await dbConnect(
-//       collectionNameObj.expenseCollection
-//     );
+export async function GET(
+  _req: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    
+    const expenseCollection = await dbConnect(collectionNameObj.expenseCollection);
 
-//     // Find the expense by ID
-//     const result = await expenseCollection.findOne({
-//       _id: new ObjectId(params.id),
-//     });
+    const result = await expenseCollection.findOne({
+      _id: new ObjectId(params.id),
+    });
 
-//     if (!result) {
-//       return NextResponse.json(
-//         { success: false, message: "Expense not found" },
-//         { status: 404 }
-//       );
-//     }
+    if (!result) {
+      return NextResponse.json({ success: false, message: "Expense not found" }, { status: 404 });
+    }
 
-//     return NextResponse.json({ success: true, data: result });
-//   } catch (error) {
-//     console.error("Error fetching expense:", error);
-//     return NextResponse.json(
-//       { success: false, message: "Failed to fetch expense" },
-//       { status: 500 }
-//     );
-//   }
-// };
+    return NextResponse.json({ success: true, data: result });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ success: false, message: "Failed to fetch expense" }, { status: 500 });
+  }
+}
+
+
+
 
 export const DELETE = async (
   req: Request,
@@ -46,7 +41,7 @@ export const DELETE = async (
       collectionNameObj.expenseCollection
     );
     const query = { _id: new ObjectId(params.id) };
- 
+
     //  Validate ownership
     const session = await getServerSession(authOption);
     if (!session || !session.user?.email) {
